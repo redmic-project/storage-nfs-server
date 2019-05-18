@@ -5,24 +5,21 @@ services:
     image: ${IMAGE_NAME:-erichough/nfs-server}:${IMAGE_TAG:-latest}
     container_name: nfs-server
     environment:
-      NFS_PORT: ${NFS_SERVER_PORT}
-      NFS_VERSION: '4.2'
+      NFS_PORT:
+      NFS_VERSION:
       NFS_DISABLE_VERSION_3: 1
-      NFS_EXPORT_0:
-      NFS_EXPORT_1:
+      NFS_EXPORT_0: ${NFS_ROOT_PATH} ${NFS_ROOT_ADDR}(${NFS_ROOT_OPTS})
     ports:
-      - target: ${NFS_SERVER_PORT}
-        published: ${NFS_SERVER_EXPOSED_PORT}
+      - target: ${NFS_PORT}
+        published: ${NFS_EXPOSED_PORT}
         protocol: tcp
-        mode: ${NFS_SERVER_PORT_MODE}
-      - target: ${NFS_SERVER_PORT}
-        published: ${NFS_SERVER_EXPOSED_PORT}
-        protocol: udp
-        mode: ${NFS_SERVER_PORT_MODE}
+        mode: ${NFS_PORT_MODE}
     volumes:
-      - data-vol:/nfs
+      - data-vol:${NFS_ROOT_PATH}
+      - /lib/modules:/lib/modules:ro
     cap_add:
       - SYS_ADMIN
+      - SYS_MODULE
     restart: always
 
 volumes:
