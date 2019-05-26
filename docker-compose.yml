@@ -3,12 +3,13 @@ version: '3.7'
 services:
   nfs-server:
     image: ${IMAGE_NAME:-erichough/nfs-server}:${IMAGE_TAG:-latest}
-    container_name: nfs-server
+    container_name: ${NFS_CONTAINER_NAME:-nfs-server}
     environment:
       NFS_PORT:
       NFS_VERSION:
       NFS_DISABLE_VERSION_3: 1
       NFS_EXPORT_0: ${NFS_ROOT_PATH} ${NFS_ROOT_ADDR}(${NFS_ROOT_OPTS})
+    network_mode: host
     ports:
       - target: ${NFS_PORT}
         published: ${NFS_EXPOSED_PORT:-2049}
