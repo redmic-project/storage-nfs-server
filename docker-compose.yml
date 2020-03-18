@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   nfs-server:
-    image: ${IMAGE_NAME:-erichough/nfs-server}:${IMAGE_TAG:-latest}
+    image: ${IMAGE_NAME:-pedroetb/nfs-server}:${IMAGE_TAG:-latest}
     container_name: ${CONTAINER_NAME:-nfs-server}
     environment:
       NFS_PORT:
