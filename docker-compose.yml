@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.4'
 
 services:
   nfs-server:
@@ -22,6 +22,9 @@ services:
       - SYS_ADMIN
       - SYS_MODULE
     restart: always
+    cpus: '${CPUS:-0.5}'
+    mem_limit: ${MEM_LIMIT:-32M}
+    mem_reservation: ${MEM_RESERVATION:-4M}
 
 volumes:
   data-vol:
