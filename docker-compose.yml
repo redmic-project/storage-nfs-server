@@ -18,6 +18,8 @@ services:
     cap_add:
       - SYS_ADMIN
       - SYS_MODULE
+    security_opt:
+      - apparmor=nfs-server
     restart: always
     cpus: '${CPUS:-0.5}'
     mem_limit: ${MEM_LIMIT:-32M}
