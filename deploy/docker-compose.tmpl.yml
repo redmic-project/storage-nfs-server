@@ -22,8 +22,8 @@ services:
       - apparmor=nfs-server
     restart: always
     cpus: '${CPUS:-0.5}'
-    mem_limit: ${MEM_LIMIT:-32M}
-    mem_reservation: ${MEM_RESERVATION:-6M}
+    mem_limit: ${MEM_LIMIT:-128M}
+    mem_reservation: ${MEM_RESERVATION:-64M}
 
 volumes:
   data-vol:
