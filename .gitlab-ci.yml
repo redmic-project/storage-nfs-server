@@ -10,4 +10,11 @@ stages:
   variables:
     STACK: storage
     FORCE_DOCKER_COMPOSE: 1
+
+.deploy-development:
+  variables:
+    COMPOSE_FILE: docker-compose.yml
+
+.deploy-production:
+  variables:
     COMPOSE_FILE: docker-compose.yml
