@@ -1,5 +1,5 @@
 include:
-  - project: 'pedroetb-projects/gitlab-ci-templates'
+  - project: 'redmic-project/gitlab-ci-templates'
     ref: master
     file: '/deployment.yml'
 
@@ -9,4 +9,3 @@ stages:
 .deploy:
   variables:
     FORCE_DOCKER_COMPOSE: 1
-    SERVICES_TO_CHECK: ${CI_PROJECT_NAME}

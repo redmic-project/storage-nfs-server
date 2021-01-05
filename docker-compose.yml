@@ -8,7 +8,7 @@ services:
       NFS_PORT:
       NFS_VERSION:
       NFS_DISABLE_VERSION_3: 1
-      NFS_EXPORT_0: ${NFS_ROOT_PATH} ${NFS_ROOT_ADDR}(${NFS_ROOT_OPTS})
+      NFS_EXPORT_0: ${NFS_ROOT_PATH} 10.0.0.0/8(${NFS_ROOT_OPTS}) 172.16.0.0/12(${NFS_ROOT_OPTS}) 192.168.0.0/16(${NFS_ROOT_OPTS})
     network_mode: host
     ports:
       - ${EXPOSED_PORT:-2049}:${NFS_PORT}

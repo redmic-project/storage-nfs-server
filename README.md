@@ -1,5 +1,7 @@
 # nfs-server
 
+Deployment of NFS server, to share contents (Docker Swarm volumes) between different hosts
+
 ## AppArmor
 
 If your Docker host has [AppArmor](https://wiki.ubuntu.com/AppArmor) activated, you'll need to perform additional steps to allow the container to start an NFS server.
