@@ -8,4 +8,6 @@ stages:
 
 .deploy:
   variables:
+    STACK: storage
     FORCE_DOCKER_COMPOSE: 1
+    COMPOSE_FILE: docker-compose.yml
