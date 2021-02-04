@@ -14,7 +14,14 @@ services:
           directoryGid=$$(echo "$${directoryDefinition}:" | cut -d ':' -f 3);
           directoryPath=${NFS_ROOT_PATH}/$${directoryName};
           mkdir -p $${directoryPath};
-          chown $${directoryUid}:$${directoryGid} $${directoryPath};
+          if [ ! -z $${directoryUid} ];
+          then
+            chown $${directoryUid} $${directoryPath};
+          fi;
+          if [ ! -z $${directoryGid} ];
+          then
+            chgrp $${directoryGid} $${directoryPath};
+          fi;
         done
     network_mode: host
     volumes:
