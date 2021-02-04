@@ -1,0 +1,29 @@
+version: '2.4'
+
+services:
+  nfs-startup:
+    image: ${NFS_STARTUP_IMAGE_NAME:-alpine}:${NFS_STARTUP_IMAGE_TAG:-latest}
+    container_name: ${NFS_STARTUP_CONTAINER_NAME:-nfs-startup}
+    entrypoint: sh -c
+    command:
+      - >
+        for directoryDefinition in ${NFS_STARTUP_DIRS};
+        do
+          directoryName=$$(echo "$${directoryDefinition}" | cut -d ':' -f 1);
+          directoryUid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 2);
+          directoryGid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 3);
+          directoryPath=${NFS_ROOT_PATH}/$${directoryName};
+          mkdir -p $${directoryPath};
+          chown $${directoryUid}:$${directoryGid} $${directoryPath};
+        done
+    network_mode: host
+    volumes:
+      - data-vol:${NFS_ROOT_PATH}
+    restart: on-failure
+    cpus: '${NFS_STARTUP_CPUS:-0.1}'
+    mem_limit: ${NFS_STARTUP_MEM_LIMIT:-16M}
+    mem_reservation: ${NFS_STARTUP_MEM_RESERVATION:-6M}
+
+volumes:
+  data-vol:
+    name: ${DATA_VOL_NAME}

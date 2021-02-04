@@ -2,16 +2,14 @@ version: '2.4'
 
 services:
   nfs-server:
-    image: ${IMAGE_NAME:-pedroetb/nfs-server}:${IMAGE_TAG:-latest}
+    image: ${IMAGE_NAME:-erichough/nfs-server}:${IMAGE_TAG:-latest}
     container_name: ${CONTAINER_NAME:-nfs-server}
     environment:
       NFS_PORT:
       NFS_VERSION:
       NFS_DISABLE_VERSION_3: 1
-      NFS_EXPORT_0: ${NFS_ROOT_PATH} ${NFS_ROOT_ADDR}(${NFS_ROOT_OPTS})
+      NFS_EXPORT_0: ${NFS_ROOT_PATH} 10.0.0.0/8(${NFS_ROOT_OPTS}) 172.16.0.0/12(${NFS_ROOT_OPTS}) 192.168.0.0/16(${NFS_ROOT_OPTS})
     network_mode: host
-    ports:
-      - ${EXPOSED_PORT:-2049}:${NFS_PORT}
     volumes:
       - data-vol:${NFS_ROOT_PATH}
       - /lib/modules:/lib/modules:ro
@@ -22,9 +20,9 @@ services:
       - apparmor=nfs-server
     restart: always
     cpus: '${CPUS:-0.5}'
-    mem_limit: ${MEM_LIMIT:-32M}
-    mem_reservation: ${MEM_RESERVATION:-4M}
+    mem_limit: ${MEM_LIMIT:-128M}
+    mem_reservation: ${MEM_RESERVATION:-64M}
 
 volumes:
   data-vol:
-    name: ${DATA_VOL_NAME:-nfs-data-vol}
+    name: ${DATA_VOL_NAME}

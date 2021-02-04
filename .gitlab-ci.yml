@@ -1,5 +1,5 @@
 include:
-  - project: 'pedroetb-projects/gitlab-ci-templates'
+  - project: 'redmic-project/gitlab-ci-templates'
     ref: master
     file: '/deployment.yml'
 
@@ -8,5 +8,73 @@ stages:
 
 .deploy:
   variables:
+    STACK: storage
     FORCE_DOCKER_COMPOSE: 1
     SERVICES_TO_CHECK: ${CI_PROJECT_NAME}
+
+.deploy-nfs-startup:
+  variables: &deploy-nfs-startup-variables
+    SERVICES_TO_CHECK: nfs-startup
+
+.deploy-nfs-startup-development:
+  extends: .deploy-development
+  variables:
+    COMPOSE_FILE: docker-compose.nfs-startup.tmpl.yml:docker-compose.nfs-startup.dev.yml
+    <<: *deploy-nfs-startup-variables
+  environment:
+    name: dev/nfs-startup
+
+.deploy-nfs-startup-production:
+  extends: .deploy-production
+  variables:
+    COMPOSE_FILE: docker-compose.nfs-startup.tmpl.yml:docker-compose.nfs-startup.prod.yml
+    <<: *deploy-nfs-startup-variables
+  environment:
+    name: pro/nfs-startup
+
+.deploy-nfs-startup-support-branch: &deploy-nfs-startup-support-branch
+  rules:
+    - if: $CI_MERGE_REQUEST_ID ||
+          $CI_COMMIT_TAG ||
+          $CI_PIPELINE_SOURCE == "schedule" ||
+          $CI_COMMIT_BRANCH == "master"
+      when: never
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+      allow_failure: true
+
+deploy-nfs-startup-support-branch-development:
+  extends: .deploy-nfs-startup-development
+  <<: *deploy-nfs-startup-support-branch
+
+.deploy-nfs-startup-stable-branch: &deploy-nfs-startup-stable-branch
+  rules:
+    - if: $CI_MERGE_REQUEST_ID ||
+          $CI_COMMIT_TAG ||
+          $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
+      allow_failure: true
+
+deploy-nfs-startup-stable-branch-development:
+  extends: .deploy-nfs-startup-development
+  <<: *deploy-nfs-startup-stable-branch
+
+deploy-nfs-startup-stable-branch-production:
+  extends: .deploy-nfs-startup-production
+  <<: *deploy-nfs-startup-stable-branch
+
+.deploy-nfs-startup-tag: &deploy-nfs-startup-tag
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: true
+
+deploy-nfs-startup-tag-development:
+  extends: .deploy-nfs-startup-development
+  <<: *deploy-nfs-startup-tag
+
+deploy-nfs-startup-tag-production:
+  extends: .deploy-nfs-startup-production
+  <<: *deploy-nfs-startup-tag
