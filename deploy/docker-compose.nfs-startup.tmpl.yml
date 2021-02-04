@@ -10,8 +10,8 @@ services:
         for directoryDefinition in ${NFS_STARTUP_DIRS};
         do
           directoryName=$$(echo "$${directoryDefinition}" | cut -d ':' -f 1);
-          directoryUid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 2);
-          directoryGid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 3);
+          directoryUid=$$(echo "$${directoryDefinition}:" | cut -d ':' -f 2);
+          directoryGid=$$(echo "$${directoryDefinition}:" | cut -d ':' -f 3);
           directoryPath=${NFS_ROOT_PATH}/$${directoryName};
           mkdir -p $${directoryPath};
           chown $${directoryUid}:$${directoryGid} $${directoryPath};
