@@ -7,9 +7,14 @@ services:
     entrypoint: sh -c
     command:
       - >
-        for directory in ${NFS_STARTUP_DIRS};
+        for directoryDefinition in ${NFS_STARTUP_DIRS};
         do
-          mkdir -p ${NFS_ROOT_PATH}/$${directory};
+          directoryName=$$(echo "$${directoryDefinition}" | cut -d ':' -f 1);
+          directoryUid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 2);
+          directoryGid=$$(echo "$${directoryDefinition}" | cut -d ':' -f 3);
+          directoryPath=${NFS_ROOT_PATH}/$${directoryName};
+          mkdir -p $${directoryPath};
+          chown $${directoryUid}:$${directoryGid} $${directoryPath};
         done
     network_mode: host
     volumes:
