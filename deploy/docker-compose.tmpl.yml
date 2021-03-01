@@ -19,6 +19,8 @@ services:
     security_opt:
       - apparmor=nfs-server
     restart: always
+    logging:
+      driver: json-file
     cpus: '${CPUS:-0.5}'
     mem_limit: ${MEM_LIMIT:-128M}
     mem_reservation: ${MEM_RESERVATION:-64M}
